@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="atteq_voice_agent.CallDetail" owl="1">
+        <div class="o_atteq_call_detail container-fluid py-3">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <button class="btn btn-link text-decoration-none p-0 me-2"
+                            t-on-click="goBack">
+                        <i class="fa fa-arrow-left me-1"/>
+                        Back to Calls
+                    </button>
+                    <h2 class="d-inline">Call Details</h2>
+                </div>
+                <button class="btn btn-primary" t-on-click="() => fetchCall(state.call?.id)">
+                    <i class="fa fa-refresh me-1"/>
+                    Refresh
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="text-center py-5">
+                <i class="fa fa-spinner fa-spin fa-2x text-muted"/>
+                <p class="mt-2 text-muted">Loading call details...</p>
+            </div>
+
+            <!-- Error State -->
+            <div t-elif="state.error" class="alert alert-danger">
+                <i class="fa fa-exclamation-triangle me-2"/>
+                <t t-esc="state.error"/>
+            </div>
+
+            <!-- Call Detail -->
+            <div t-elif="state.call" class="row">
+                <!-- Main Info -->
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5 class="mb-0">Call Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th style="width: 150px;">ID:</th>
+                                        <td><t t-esc="state.call.id"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Caller Number:</th>
+                                        <td><t t-esc="state.call.callerNumber"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Duration:</th>
+                                        <td><t t-esc="formatDuration(state.call.duration)"/></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Received At:</th>
+                                        <td><t t-esc="formatDate(state.call.receivedAt)"/></td>
+                                    </tr>
+                                    <tr t-if="state.call.Agent">
+                                        <th>Agent:</th>
+                                        <td><t t-esc="state.call.Agent.name"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transcript -->
+                <div class="col-md-6">
+                    <div class="card mb-3" t-if="state.call.transcript">
+                        <div class="card-header">
+                            <h5 class="mb-0">Transcript</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="p-3 bg-light rounded" style="max-height: 400px; overflow-y: auto; overflow-x: hidden;">
+                                <t t-foreach="parseTranscript(state.call.transcript)" t-as="msg" t-key="msg_index">
+                                    <div class="d-flex mb-2"
+                                         t-att-class="msg.isClient ? 'justify-content-end' : 'justify-content-start'">
+                                        <div class="p-2 rounded-3 shadow-sm"
+                                             style="max-width: 75%;"
+                                             t-att-class="msg.isClient ? 'bg-purple text-white' : 'bg-white border'"
+                                             t-att-style="msg.isClient ? 'border-bottom-right-radius: 0 !important; background-color: #7c3aed !important;' : 'border-bottom-left-radius: 0 !important;'">
+                                            <div class="d-flex align-items-center mb-1">
+                                                <i t-att-class="msg.isClient ? 'fa fa-user me-1' : 'fa fa-robot me-1'"/>
+                                                <small t-att-class="msg.isClient ? 'opacity-75' : 'text-muted'">
+                                                    <t t-esc="msg.speaker"/>
+                                                </small>
+                                                <small t-att-class="msg.isClient ? 'opacity-50 ms-auto' : 'text-muted ms-auto'"
+                                                       style="font-size: 0.75rem;">
+                                                    <t t-esc="msg.time"/>
+                                                </small>
+                                            </div>
+                                            <div><t t-esc="msg.message"/></div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recording -->
+                    <div class="card mb-3" t-if="state.call.recordingUrl">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recording</h5>
+                        </div>
+                        <div class="card-body">
+                            <audio controls="controls" t-att-src="state.call.recordingUrl"
+                                   class="w-100">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Node Records -->
+                <div class="col-12" t-if="state.call.CallNodeRecords and state.call.CallNodeRecords.length > 0">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Node Records</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <table class="table mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Node</th>
+                                        <th>Entered At</th>
+                                        <th>Exited At</th>
+                                        <th>Tools Used</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.call.CallNodeRecords" t-as="record" t-key="record.id">
+                                        <tr>
+                                            <td><t t-esc="record.Node.name"/></td>
+                                            <td><t t-esc="formatDate(record.enteredAt)"/></td>
+                                            <td><t t-esc="formatDate(record.exitedAt)"/></td>
+                                            <td>
+                                                <t t-foreach="record.toolsUsed" t-as="tool" t-key="tool">
+                                                    <span class="badge bg-info me-1">
+                                                        <t t-esc="tool"/>
+                                                    </span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Atteq Call Views -->
+        <record id="view_atteq_call_tree" model="ir.ui.view">
+            <field name="name">atteq.call.tree</field>
+            <field name="model">atteq.call</field>
+            <field name="arch" type="xml">
+                <tree string="Calls" create="false" edit="false">
+                    <field name="name" string="ID" optional="show"/>
+                    <field name="caller_number"/>
+                    <field name="duration" widget="float_time"/>
+                    <field name="received_at"/>
+                    <field name="agent_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_atteq_call_form" model="ir.ui.view">
+            <field name="name">atteq.call.form</field>
+            <field name="model">atteq.call</field>
+            <field name="arch" type="xml">
+                <form string="Call" create="false" edit="false">
+                    <header>
+                        <button name="action_view_call_detail" type="object"
+                                class="btn-primary" string="View Detail with Transcript"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name" string="ID"/>
+                            <field name="caller_number"/>
+                            <field name="duration" widget="float_time"/>
+                            <field name="received_at"/>
+                            <field name="agent_id"/>
+                        </group>
+                        <group string="Transcript">
+                            <field name="transcript" nolabel="1"/>
+                        </group>
+                        <group string="Recording" attrs="{'invisible': [('recording_url', '=', False)]}">
+                            <field name="recording_url" widget="url" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Atteq Call Action -->
+        <record id="action_atteq_calls" model="ir.actions.act_window">
+            <field name="name">Calls</field>
+            <field name="res_model">atteq.call</field>
+            <field name="view_mode">tree,form</field>
+            <field name="context">{'search_default_sync': 1}</field>
+        </record>
+
+        <!-- Atteq Agent Views -->
+        <record id="view_atteq_agent_tree" model="ir.ui.view">
+            <field name="name">atteq.agent.tree</field>
+            <field name="model">atteq.agent</field>
+            <field name="arch" type="xml">
+                <tree string="Agents" create="false" edit="false">
+                    <field name="display_name" string="Name"/>
+                    <field name="name" string="ID" optional="show"/>
+                    <field name="description"/>
+                    <field name="created_at"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_atteq_agent_form" model="ir.ui.view">
+            <field name="name">atteq.agent.form</field>
+            <field name="model">atteq.agent</field>
+            <field name="arch" type="xml">
+                <form string="Agent" create="false" edit="false">
+                    <header>
+                        <button name="action_view_agent_detail" type="object"
+                                class="btn-primary" string="View Detail with Nodes"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="display_name" string="Name"/>
+                            <field name="name" string="ID"/>
+                            <field name="description"/>
+                            <field name="greeting"/>
+                            <field name="root_node_id"/>
+                            <field name="ai_profile_id"/>
+                            <field name="created_at"/>
+                            <field name="updated_at"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Atteq Agent Action -->
+        <record id="action_atteq_agents" model="ir.actions.act_window">
+            <field name="name">Agents</field>
+            <field name="res_model">atteq.agent</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- OWL Client Actions (fetch direct from API) -->
+        <record id="action_atteq_calls_client" model="ir.actions.client">
+            <field name="name">Calls</field>
+            <field name="tag">atteq_calls_list</field>
+        </record>
+
+        <record id="action_atteq_agents_client" model="ir.actions.client">
+            <field name="name">Agents</field>
+            <field name="tag">atteq_agents_list</field>
+        </record>
+
+        <!-- Menus -->
+        <menuitem id="atteq_voice_agent_menu_root" name="AI Voice Agent"/>
+        <menuitem id="atteq_calls_menu" name="Calls" parent="atteq_voice_agent_menu_root"
+                  action="action_atteq_calls_client" sequence="10"/>
+        <menuitem id="atteq_agents_menu" name="Agents" parent="atteq_voice_agent_menu_root"
+                  action="action_atteq_agents_client" sequence="15"/>
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_atteq_config_settings,atteq_config_settings_access,model_atteq_config_settings,base.group_user,1,1,1,1
+access_atteq_call,atteq_call_access,model_atteq_call,base.group_user,1,1,1,1
+access_atteq_agent,atteq_agent_access,model_atteq_agent,base.group_user,1,1,1,1

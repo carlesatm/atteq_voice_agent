@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Atteq Settings Form View -->
+        <record id="atteq_config_settings_form" model="ir.ui.view">
+            <field name="name">atteq.config.settings.form</field>
+            <field name="model">atteq.config.settings</field>
+            <field name="arch" type="xml">
+                <form string="Atteq Connector Settings">
+                    <sheet>
+                        <group>
+                            <field name="atteq_api_token" password="True"/>
+                        </group>
+                        <div class="mt16">
+                            <button string="Test Connection"
+                                    type="object"
+                                    name="action_test_connection"
+                                    class="btn btn-primary"/>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action for Settings -->
+        <record id="action_atteq_config_settings" model="ir.actions.act_window">
+            <field name="name">Atteq Settings</field>
+            <field name="res_model">atteq.config.settings</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+            <field name="context">{'module': 'atteq_voice_agent'}</field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem id="atteq_settings_menu"
+                  name="Settings"
+                  parent="atteq_voice_agent_menu_root"
+                  action="action_atteq_config_settings"
+                  sequence="30"/>
+    </data>
+</odoo>

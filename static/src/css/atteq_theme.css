@@ -1,0 +1,126 @@
+/*
+ * Atteq Connector — Custom theme
+ * ALL rules are scoped under .o_atteq_* to avoid leaking into other Odoo modules.
+ * Colors use Odoo/Bootstrap CSS variables so they respect the configured company theme.
+ */
+
+/* ─── Card baseline ────────────────────────────────────────────────── */
+/* Remove borders, add a subtle shadow — same feel as Odoo's dashboard cards */
+.o_atteq_calls_list .card,
+.o_atteq_call_detail .card,
+.o_atteq_agents_list .card,
+.o_atteq_agent_detail .card {
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+    overflow: hidden;
+}
+
+/* ─── Card headers: match Odoo's native light-gray style ───────────── */
+.o_atteq_calls_list .card-header,
+.o_atteq_call_detail .card-header,
+.o_atteq_agents_list .card-header,
+.o_atteq_agent_detail .card-header {
+    background: #f8f9fa !important;          /* Bootstrap gray-100, same as Odoo panels */
+    color: #212529 !important;               /* Bootstrap gray-900 */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 0.75rem 1rem !important;
+    font-weight: 600;
+}
+
+/* ─── Calls list: table row hover ──────────────────────────────────── */
+.o_atteq_calls_list .table tbody tr {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+.o_atteq_calls_list .table tbody tr:hover {
+    background-color: rgba(113, 75, 103, 0.06) !important;
+}
+
+/* ─── Agents list: clickable card hover ────────────────────────────── */
+.o_atteq_agents_list .clickable-card {
+    cursor: pointer;
+    transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+.o_atteq_agents_list .clickable-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ─── Chat bubbles (call detail) ────────────────────────────────────── */
+.o_atteq_call_detail .atteq-chat-container {
+    scroll-behavior: smooth;
+}
+
+/* ─── Call detail: timeline connector ──────────────────────────────── */
+.o_atteq_call_detail .atteq-timeline {
+    position: relative;
+}
+
+/* ─── Agent detail: SVG graph container ─────────────────────────────── */
+.o_atteq_agent_detail .card-body svg {
+    display: block;
+}
+
+/* ─── SVG Graph: node colors use Odoo primary via CSS variable ──────── */
+/* Node body — default (primary color) */
+.o_atteq_agent_detail .atteq-node-default {
+    fill: var(--o-main-color, var(--bs-primary, #017E84));
+    transition: opacity 0.15s;
+}
+/* Node body — root node (success/green) */
+.o_atteq_agent_detail .atteq-node-root {
+    fill: var(--bs-success, #198754);
+    transition: opacity 0.15s;
+}
+/* Node body — selected state: yellow stroke */
+.o_atteq_agent_detail .atteq-node-selected {
+    stroke: var(--bs-warning, #ffc107);
+    stroke-width: 3;
+}
+/* Node hover */
+.o_atteq_agent_detail .atteq-graph-node-group:hover .atteq-node-body {
+    opacity: 0.88;
+}
+
+/* Node shadow (pseudo-drop-shadow rect) */
+.o_atteq_agent_detail .atteq-node-shadow {
+    fill: rgba(0, 0, 0, 0.10);
+}
+
+/* Node text colors */
+.o_atteq_agent_detail .atteq-node-name {
+    fill: white;
+}
+.o_atteq_agent_detail .atteq-node-desc {
+    fill: rgba(255, 255, 255, 0.72);
+}
+.o_atteq_agent_detail .atteq-node-tools {
+    fill: rgba(255, 255, 255, 0.85);
+}
+
+/* Root badge */
+.o_atteq_agent_detail .atteq-root-badge-bg {
+    fill: rgba(255, 255, 255, 0.22);
+}
+.o_atteq_agent_detail .atteq-root-badge-text {
+    fill: white;
+}
+
+/* ─── SVG Graph: edge colors ────────────────────────────────────────── */
+.o_atteq_agent_detail .atteq-graph-edge {
+    stroke: var(--o-main-color, var(--bs-primary, #017E84));
+    opacity: 0.7;
+}
+.o_atteq_agent_detail .atteq-arrow-head {
+    fill: var(--o-main-color, var(--bs-primary, #017E84));
+}
+.o_atteq_agent_detail .atteq-edge-label-bg {
+    fill: white;
+    stroke: var(--o-main-color, var(--bs-primary, #017E84));
+    stroke-width: 1;
+}
+.o_atteq_agent_detail .atteq-edge-label-text {
+    fill: var(--o-main-color, var(--bs-primary, #017E84));
+}

@@ -1,0 +1,59 @@
+/* Atteq Module - Scoped Styles Only */
+
+/* Only apply to our module's components */
+.o_atteq_calls_list,
+.o_atteq_call_detail,
+.o_atteq_agents_list,
+.o_atteq_agent_detail {
+    /* Module-specific styles only */
+}
+
+/* Call list specific */
+.o_atteq_calls_list .o_list_renderer {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* Agents list - card clickable */
+.o_atteq_agents_list .card[style*="cursor"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Call detail specific */
+.o_atteq_call_detail .timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.o_atteq_call_detail .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #6366f1;
+}
+
+.o_atteq_call_detail .timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #6366f1;
+    border: 2px solid white;
+    position: absolute;
+    left: -25px;
+    top: 5px;
+}
+
+/* Agent detail - node cards */
+.o_atteq_agent_detail .node-card {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.o_atteq_agent_detail .node-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.3);
+}

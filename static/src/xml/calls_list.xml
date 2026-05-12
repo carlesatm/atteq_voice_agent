@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="atteq_voice_agent.CallsList" owl="1">
+        <div class="o_atteq_calls_list container-fluid py-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2>Calls</h2>
+                <button class="btn btn-primary" t-on-click="fetchCalls">
+                    <i class="fa fa-refresh me-1"/>
+                    Refresh
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="text-center py-5">
+                <i class="fa fa-spinner fa-spin fa-2x text-muted"/>
+                <p class="mt-2 text-muted">Loading calls...</p>
+            </div>
+
+            <!-- Error State -->
+            <div t-elif="state.error" class="alert alert-danger">
+                <i class="fa fa-exclamation-triangle me-2"/>
+                <t t-esc="state.error"/>
+            </div>
+
+            <!-- Calls List -->
+            <div t-elif="not state.loading" class="card">
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Caller Number</th>
+                                <th>Duration</th>
+                                <th>Received At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-if="state.calls.length === 0">
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    No calls found
+                                </td>
+                            </tr>
+                            <t t-foreach="state.calls" t-as="call" t-key="call.id">
+                                <tr>
+                                    <td><t t-esc="call.id"/></td>
+                                    <td><t t-esc="call.callerNumber"/></td>
+                                    <td><t t-esc="formatDuration(call.duration)"/></td>
+                                    <td><t t-esc="formatDate(call.receivedAt)"/></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info"
+                                                t-on-click="() => viewCall(call.id)">
+                                            <i class="fa fa-eye me-1"/>
+                                            View
+                                        </button>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
